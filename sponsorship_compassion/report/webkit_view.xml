@@ -1,0 +1,15 @@
+<openerp>
+<data>
+	<record model="ir.ui.view" id="header_webkit">
+		<field name="name">res.company.header.html.custom</field>
+		<field name="model">ir.header_webkit</field>
+		<field name="inherit_id" ref="report_webkit.header_webkit" />
+		<field name="arch" type="xml">
+			<field name="format" position="after">
+				<field name="page_width" />
+				<field name="page_height" />
+			</field>
+		</field>
+	</record>
+</data>
+</openerp>
