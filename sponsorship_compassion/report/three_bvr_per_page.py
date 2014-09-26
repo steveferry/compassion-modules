@@ -66,22 +66,34 @@ class three_bvr_per_page(report_sxw.rml_parse):
             )
 
     def _get_bvrs_data(self, partner):
+        contract_obj = self.pool.get('res.partner')
+        c_ids = contract_obj.search(cr, uid,
+                                    [('partner_id', '=', partner.id)],
+                                    context=context)
+        
         data = []
-        i = 0  # Used for numpole in gift ref
-        for sponsorship in partner.contracts_paid + partner.contracts_fully_managed:
-            i += 1
-            if sponsorship.state not in ['active', 'waiting']:
-                continue
-            for gift_id, checked in self.gifts.iteritems():
-                if not checked:
+        for group in partner.contract_group_ids:
+            # Generate sponsorship BVR -> grouped
+            ref, amount, com = self._get_sponsorship_data(cr, uid, group,
+                                                          context)
+            if ref:
+                data.append(ref, amount, com)
+            # Generate gift BVR -> individuals
+            for sponsorship in group.contract_ids:
+                if sponsorship.state not in ['active', 'waiting']:
                     continue
-                data.append([self._compute_gift_ref(gift_id, partner, i,
-                                                    sponsorship),
-                             False, self._get_gift_com(gift_id, sponsorship)])
+                for gift_id, checked in self.gifts.iteritems():
+                    if not checked:
+                        continue
+                    data.append([self._compute_gift_ref(
+                                    gift_id, partner,
+                                    c_ids.index(sponsorship.id), sponsorship),
+                                 False,
+                                 self._get_gift_com(gift_id, sponsorship)])
         if self.fund:
             data.append([self._compute_fund_ref(self.fund, partner), 
                          False, self._get_fund_com(self.fund)])
-        
+
         return data
 
     def _compute_fund_ref(self, fund, partner):
@@ -108,6 +120,16 @@ class three_bvr_per_page(report_sxw.rml_parse):
         if gift_id == '1' and sponsorship.child_id.birthdate:
             comment += _('Birthdate: %s') % sponsorship.child_id.birthdate
         return comment
+
+    def _get_sponsorship_data(self, cr, uid, group, context=None):
+        ''' Generate bvr ref and comment for contract group '''
+        # Ref is taken from contract
+        ref = group.bvr_reference
+        # amount is sum of active and waiting contracts
+        amount = [c.total_amount for c in group.contract_ids
+                  if c.state in ('active', 'waiting')]
+        com = ''
+        return ref, amount, com
 
     @staticmethod
     def _space(nbr, nbrspc=5):
