@@ -14,7 +14,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT as DTF
 import pytz
 from datetime import datetime, timedelta, time
-
+import pdb
 
 class hr_planning_wizard(models.TransientModel):
     _name = 'hr.planning.wizard'
