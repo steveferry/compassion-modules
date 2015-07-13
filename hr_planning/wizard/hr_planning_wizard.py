@@ -43,7 +43,6 @@ class hr_planning_wizard(models.TransientModel):
                 [('employee_id', '=', employee.id),
                  ('start_date', '>=', today.strftime(DF))])
             planning_days_to_remove.unlink()
-
             # Loop on each contract related to the employee
             for contract in employee.contract_ids:
                 if not contract.working_hours.attendance_ids:
@@ -131,7 +130,6 @@ class hr_planning_wizard(models.TransientModel):
 
     @api.model
     def _move_planning_days(self, employee):
-
         # Search for validated request
         planning_day_move_requests = self.env[
             'hr.planning.day.move.request'].search(
