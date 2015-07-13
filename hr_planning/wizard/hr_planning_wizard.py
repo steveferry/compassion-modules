@@ -14,7 +14,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT as DTF
 import pytz
 from datetime import datetime, timedelta, time
-import pdb
+
 
 class hr_planning_wizard(models.TransientModel):
     _name = 'hr.planning.wizard'
@@ -189,7 +189,6 @@ class hr_planning_wizard(models.TransientModel):
                     {'start_date': new_start_date,
                      'end_date': new_end_date,
                      'employee_id': employee.id})
-
     @api.model
     def _get_time_zone(self):
         usr = self.env['res.users'].browse(SUPERUSER_ID)
