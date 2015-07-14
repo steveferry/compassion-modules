@@ -9,7 +9,11 @@
 #
 ##############################################################################
 
+<<<<<<< HEAD
 from openerp import models, fields, api
+=======
+from openerp import models, fields
+>>>>>>> Migrate module child_compassion to V8
 
 
 class undelegate_child_wizard(models.TransientModel):

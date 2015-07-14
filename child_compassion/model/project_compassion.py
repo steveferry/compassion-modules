@@ -227,7 +227,6 @@ class compassion_project(models.Model):
             "The project was suspended and funds are retained.",
             "Project Suspended", 'comment')
         return True
-
     @api.model
     def https_get(self, url):
         """" Try to fetch URL with secure connection. """
