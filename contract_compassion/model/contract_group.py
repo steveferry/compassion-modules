@@ -94,7 +94,6 @@ class contract_group(models.Model):
         if 'bvr_reference' in vals:
             inv_vals['bvr_reference'] = vals['bvr_reference']
             contract_ids.extend(self.mapped('contract_ids.id'))
-
         res = super(contract_group, self).write(vals)
 
         if contract_ids:
