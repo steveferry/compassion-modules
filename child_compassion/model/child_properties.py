@@ -9,7 +9,6 @@
 #
 ##############################################################################
 
-
 from openerp import models, fields, api, _
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 
