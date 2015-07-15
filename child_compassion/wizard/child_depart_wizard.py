@@ -56,5 +56,4 @@ class child_depart_wizard(models.TransientModel):
             vals['gp_exit_reason'] = self.gp_exit_reason
 
         self.child_id.write(vals)
-
         return True
