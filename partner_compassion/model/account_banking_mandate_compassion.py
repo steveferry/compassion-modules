@@ -11,7 +11,6 @@
 
 from openerp import api, models
 
-
 MANDATE_STATE = {'create': 'created',
                  'cancel': 'cancelled',
                  'validate': 'validated',
@@ -42,6 +41,7 @@ class Account_Banking_Mandate(models.Model):
         """
         result = super(Account_Banking_Mandate, self).create(data)
         result._update_mandate_status_partner('create')
+
         return result
 
     @api.multi
