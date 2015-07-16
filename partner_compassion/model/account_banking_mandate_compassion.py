@@ -42,7 +42,6 @@ class Account_Banking_Mandate(models.Model):
         """
         result = super(Account_Banking_Mandate, self).create(data)
         result._update_mandate_status_partner('create')
-
         return result
 
     @api.multi
@@ -53,7 +52,6 @@ class Account_Banking_Mandate(models.Model):
 
         for mandate in self:
             mandate._update_mandate_status_partner('validate')
-
         super(Account_Banking_Mandate, self).validate()
 
         return True
