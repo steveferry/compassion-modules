@@ -59,7 +59,6 @@ class child_compassion(models.Model):
                         'An error occured while fetching the unsponsored '
                         ' date of child %s.' % child.code +
                         json_data['error']['message'])
-
     @api.multi
     def get_infos(self):
         """ Update unsponsored date. """
