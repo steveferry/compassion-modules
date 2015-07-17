@@ -17,6 +17,8 @@ from dateutil.relativedelta import relativedelta
 import logging
 logger = logging.getLogger(__name__)
 
+import pdb
+
 
 class recurring_contract(models.Model):
     _inherit = "recurring.contract"

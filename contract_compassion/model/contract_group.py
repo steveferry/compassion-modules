@@ -21,6 +21,7 @@ class contract_group(models.Model):
     ##########################################################################
     #                                 FIELDS                                 #
     ##########################################################################
+
     bvr_reference = fields.Char(
         'BVR Ref', size=32, track_visibility="onchange")
     payment_term_id = fields.Many2one(
@@ -153,6 +154,7 @@ class contract_group(models.Model):
     ##########################################################################
     #                             VIEW CALLBACKS                             #
     ##########################################################################
+
     @api.onchange('partner_id')
     def on_change_partner_id(self):
         if not self.partner_id:
