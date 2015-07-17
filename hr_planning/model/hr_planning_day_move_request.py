@@ -25,7 +25,11 @@ class hr_planning_day_move_request(models.Model):
         - An employee cannot add a working day during his/her holiday
     '''
     _name = "hr.planning.day.move.request"
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> Add class structure description
     ##########################################################################
     #                                 FIELDS                                 #
     ##########################################################################
@@ -55,13 +59,24 @@ class hr_planning_day_move_request(models.Model):
     #                             FIELDS METHODS                             #
     ##########################################################################
 
+<<<<<<< HEAD
+=======
+    ##########################################################################
+    #                             FIELDS METHODS                             #
+    ##########################################################################
+
+>>>>>>> Add class structure description
     def _employee_get(self):
         return self.env.user.id
 
     ##########################################################################
     #                              ORM METHODS                               #
     ##########################################################################
+<<<<<<< HEAD
 
+=======
+
+>>>>>>> Add class structure description
     @api.model
     def create(self, vals):
         # Move request
