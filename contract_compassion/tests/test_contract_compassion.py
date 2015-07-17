@@ -89,6 +89,7 @@ class test_contract_compassion(common.TransactionCase):
                 next_year, 12, 31)).strftime(DF), DF),
             })
         fiscal_year.create_period()
+
         contract_group = self._create_group(
             'do_nothing', 1, 'month', self.partners.ids[0], 5,
             self.payment_term_id)
