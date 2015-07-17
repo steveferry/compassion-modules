@@ -74,7 +74,8 @@ class contract_group(models.Model):
              'recurring_invoicer_id': invoicer.id}).env.context
 
         # Search active Sponsorships with automatic birthday gift
-        gen_states = self._get_gen_states()
+        gen_states = self.with_context(
+            recurring_invoicer_id=invoicer)._get_gen_states()
         contract_search = [('birthday_invoice', '>', 0.0),
                            ('state', 'in', gen_states)]
         if self.ids:
