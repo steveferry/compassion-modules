@@ -266,7 +266,6 @@ class recurring_contract(models.Model):
             if contract.parent_id:
                 logger.info("Contract " + str(contract.id) + " contract sub.")
                 contract.parent_id.signal_workflow('new_contract_validated')
-        return True
 
     @api.multi
     def contract_cancelled(self):
