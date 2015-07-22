@@ -30,7 +30,6 @@ class contract_group(models.Model):
     ##########################################################################
     #                                 FIELDS                                 #
     ##########################################################################
-
     contains_sponsorship = fields.Boolean(
         string='Contains sponsorship', compute='_contains_sponsorship',
         readonly=True, default=lambda self: 'S' in self.env.context.get(
@@ -144,7 +143,7 @@ class contract_group(models.Model):
                 if not suspend_config_id:
                     return False
                 current_product = self.env['product.product'].with_context(
-                    lang='en_US'}).browse(invl_data['product_id'])
+                    lang='en_US').browse(invl_data['product_id'])
                 if current_product.categ_name == SPONSORSHIP_CATEGORY:
                     product_id = config_obj.browse(suspend_config_id[0]).id
                     invl_data.update(self.env[

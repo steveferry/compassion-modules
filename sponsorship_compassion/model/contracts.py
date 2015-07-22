@@ -18,6 +18,7 @@ from lxml import etree
 
 from .product import GIFT_CATEGORY, SPONSORSHIP_CATEGORY, FUND_CATEGORY
 import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -713,6 +714,7 @@ class sponsorship_contract(models.Model):
               invl.product_id.name, invl.price_subtotal])
             for invl in inv_lines.filtered(
                 lambda invl: invl.contract_id.type == 'S')])
+
         for inv_line in inv_lines:
             invoice = inv_line.invoice_id
             mvl_found = False

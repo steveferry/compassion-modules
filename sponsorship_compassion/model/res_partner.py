@@ -119,7 +119,9 @@ class res_partner(models.Model):
             'view_mode': 'form',
             'res_model': 'recurring.contract',
             'target': 'current',
-            'context': context
+            'context': self.env.context.with_context({
+                'default_partner_id': self,
+                'default_type': 'S', })
         }
 
     @api.multi

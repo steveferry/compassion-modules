@@ -96,7 +96,7 @@ class generate_gift_wizard(models.TransientModel):
             'view_mode': 'tree,form',
             'view_type': 'form',
             'res_model': 'account.invoice',
-            'domain': [('id', 'in', invoice_ids)],
+            'domain': [('id', 'in', invoice_ids.ids)],
             'context': {'form_view_ref': 'account.invoice_form'},
             'type': 'ir.actions.act_window',
         }
