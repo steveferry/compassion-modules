@@ -10,6 +10,7 @@
 ##############################################################################
 
 from openerp import api, exceptions, fields, models, _
+
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from openerp.tools import mod10r
 
@@ -96,7 +97,7 @@ class generate_gift_wizard(models.TransientModel):
             'view_mode': 'tree,form',
             'view_type': 'form',
             'res_model': 'account.invoice',
-            'domain': [('id', 'in', invoice_ids.ids)],
+            'domain': [('id', 'in', invoice_ids)],
             'context': {'form_view_ref': 'account.invoice_form'},
             'type': 'ir.actions.act_window',
         }
