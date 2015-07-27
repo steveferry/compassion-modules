@@ -168,7 +168,7 @@ class sponsorship_contract(models.Model):
     def write(self, vals):
         """ Perform various checks on contract modification """
         if 'child_id' in vals:
-                self._on_change_child_id(vals)
+            self._on_change_child_id(vals)
 
         return super(sponsorship_contract, self).write(vals)
 

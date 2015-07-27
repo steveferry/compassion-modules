@@ -73,8 +73,7 @@ class contract_group(models.Model):
              'recurring_invoicer_id': invoicer.id}).env.context
 
         # Search active Sponsorships with automatic birthday gift
-        gen_states = self.with_context(
-            recurring_invoicer_id=invoicer)._get_gen_states()
+        gen_states = self._get_gen_states()
         contract_search = [('birthday_invoice', '>', 0.0),
                            ('state', 'in', gen_states)]
         if self.ids:
@@ -145,10 +144,9 @@ class contract_group(models.Model):
                 current_product = self.env['product.product'].with_context(
                     lang='en_US').browse(invl_data['product_id'])
                 if current_product.categ_name == SPONSORSHIP_CATEGORY:
-                    product_id = config_obj.browse(suspend_config_id[0]).id
                     invl_data.update(self.env[
                         'recurring.contract'].get_suspend_invl_data(
-                            product_id))
+                            suspend_config_id.id))
 
             if contract.type == 'G':
                 sponsorship = contract_line.sponsorship_id
