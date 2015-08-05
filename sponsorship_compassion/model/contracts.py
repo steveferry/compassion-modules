@@ -15,7 +15,7 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from lxml import etree
-
+import pdb
 from .product import GIFT_CATEGORY, SPONSORSHIP_CATEGORY, FUND_CATEGORY
 import logging
 

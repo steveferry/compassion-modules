@@ -65,8 +65,8 @@ class res_partner(models.Model):
                 'view_invoice_line_partner_tree')[1]
         except ValueError:
             view_id = False
-        self.env.context = self.env.with_context(
-            search_default_partner_id=self.ids)
+        self.env.context = self.with_context(
+            search_default_partner_id=self.ids).env.context
         action = {
             'name': _('Related invoice lines'),
             'type': 'ir.actions.act_window',
