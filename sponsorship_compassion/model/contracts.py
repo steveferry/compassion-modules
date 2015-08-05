@@ -16,7 +16,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from lxml import etree
-
+import pdb
 from .product import GIFT_CATEGORY, SPONSORSHIP_CATEGORY, FUND_CATEGORY
 import logging
 logger = logging.getLogger(__name__)
@@ -460,7 +460,8 @@ class sponsorship_contract(models.Model):
         if self.group_id:
             if not self._is_a_valid_group():
                 self.group_id = False
-
+        
+        self.correspondant_id = self.partner_id
         if 'S' in self.type and self.state == 'draft':
             # If state draft correspondant_id=partner_id
             self.correspondant_id = self.partner_id
@@ -679,8 +680,8 @@ class sponsorship_contract(models.Model):
                 "UPDATE recurring_contract SET next_invoice_date = %s "
                 "WHERE id = %s", (next_date, contract.id))
             self.env.invalidate_all()
-        self.env['recurring.contract.group']._store_set_values(
-            ['next_invoice_date'], groups.ids)
+        pdb.set_trace()
+        groups._set_next_invoice_date()
         return True
 
     @api.multi
