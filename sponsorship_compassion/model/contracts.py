@@ -460,7 +460,7 @@ class sponsorship_contract(models.Model):
         if self.group_id:
             if not self._is_a_valid_group():
                 self.group_id = False
-        
+
         self.correspondant_id = self.partner_id
         if 'S' in self.type and self.state == 'draft':
             # If state draft correspondant_id=partner_id
