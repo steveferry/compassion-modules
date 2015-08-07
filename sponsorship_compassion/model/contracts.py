@@ -9,7 +9,7 @@
 #
 ##############################################################################
 
-from openerp import api, exceptions, fields, models, netsvc, _
+from openerp import api, exceptions, fields, models, _
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
 
 from datetime import datetime
@@ -310,17 +310,10 @@ class sponsorship_contract(models.Model):
                 "are automatically cancelled.".format(
                     project_code, contract.child_id.code),
                 "Project Suspended", 'comment')
-<<<<<<< HEAD
 
         # Change invoices if config tells to do so.
         if suspend_config:
             product_id = int(suspend_config[0].value)
-=======
-
-        # Change invoices if config tells to do so.
-        if suspend_config:
-            product_id = int(suspend_config[0].value)
->>>>>>> da502c1... Code corrections
             self._suspend_change_invoices(date_start,
                                           product_id)
 
@@ -342,11 +335,7 @@ class sponsorship_contract(models.Model):
         invoices.action_cancel_draft()
         vals = self.get_suspend_invl_data(product_id)
         cancel_inv_lines.write(vals)
-
-        wf_service = netsvc.LocalService('workflow')
-        for invoice_id in invoices.ids:
-            wf_service.trg_validate(self.env.user.id, 'account.invoice',
-                                    invoice_id, 'invoice_open', self.env.cr)
+        invoices.signal_workflow('invoice_open')
 
     @api.multi
     def get_suspend_invl_data(self, product_id):
@@ -372,7 +361,6 @@ class sponsorship_contract(models.Model):
         """
         date_start = datetime.today().strftime(DF)
         config_obj = self.env['ir.config_parameter']
-        wf_service = netsvc.LocalService('workflow')
         suspend_config = config_obj.search([
             ('key', '=', 'sponsorship_compassion.suspend_product_id')])[0]
         invl_obj = self.env['account.invoice.line']
@@ -410,10 +398,7 @@ class sponsorship_contract(models.Model):
             # Cancel and confirm again invoices to update move lines
             invoices.action_cancel()
             invoices.action_cancel_draft()
-            for inv_id in invoices.ids:
-                wf_service.trg_validate(
-                    self.env.user.id, 'account.invoice', inv_id,
-                    'invoice_open', self.env.cr)
+            invoices.signal_workflow('invoice_open')
         else:
             # Open again cancelled invoices
             inv_lines = invl_obj.search([
@@ -426,9 +411,7 @@ class sponsorship_contract(models.Model):
             for invoice in inv_lines.mapped('invoice_id').filtered(
                     lambda inv: inv.state == 'cancel'):
                 invoice.action_cancel_draft()
-                wf_service.trg_validate(
-                    self.env.user.id, 'account.invoice',
-                    invoice.id, 'invoice_open', self.env.cr)
+                invoice.signal_workflow('invoice_open')
 
         # Log a note in the contracts
         if contracts:
@@ -529,7 +512,6 @@ class sponsorship_contract(models.Model):
         sponsor_cat_id = category_obj.search([('name', '=', 'Sponsor')])[0].id
         old_sponsor_cat_id = category_obj.search(
             [('name', '=', 'Old Sponsor')])[0].id
-        wf_service = netsvc.LocalService('workflow')
 
         for sponsorship in self:
             sponsorship.child_id.write({'sponsor_id': False})
@@ -551,9 +533,7 @@ class sponsorship_contract(models.Model):
                 if len(contract.contract_line_ids) > 1:
                     line.unlink()
                 else:
-                    wf_service.trg_validate(
-                        self.env.user.id, self._name, contract.id,
-                        'contract_terminated', self.env.cr)
+                    contract.signal_workflow('contract_terminated')
 
     @api.multi
     def contract_active(self):
@@ -564,7 +544,6 @@ class sponsorship_contract(models.Model):
         super(sponsorship_contract, self).contract_active()
         # Read data in english
         self.env.context = self.with_context(lang='en_US').env.context
-        wf_service = netsvc.LocalService('workflow')
         sponsor_cat_id = self.env.ref(
             'partner_compassion.res_partner_category_sponsor').id
         con_line_obj = self.env['recurring.contract.line']
@@ -575,10 +554,8 @@ class sponsorship_contract(models.Model):
                     'category_id': [(4, sponsor_cat_id)]})
                 gift_contract_lines = con_line_obj.search([
                     ('sponsorship_id', '=', contract.id)])
-                for con_id in gift_contract_lines.mapped('contract_id').ids:
-                    wf_service.trg_validate(
-                        self.env.user.id, self._name, con_id,
-                        'contract_active', self.env.cr)
+                gift_contracts = gift_contract_lines.mapped('contract_id')
+                gift_contracts.signal_workflow('contract_active')
 
     @api.multi
     def _on_change_child_id(self, vals):
@@ -788,13 +765,8 @@ class sponsorship_contract(models.Model):
         inv_line_obj = self.env['account.invoice.line']
         if keep_lines:
             # Cancel invoices instead of deleting them
-            wf_service = netsvc.LocalService('workflow')
             invoices.write({'move_id': False})
-            for invoice in invoices:
-                wf_service.trg_validate(self.env.user.id, 'account.invoice',
-                                        invoice.id, 'invoice_cancel',
-                                        self.env.cr)
-                invoice.message_post(_("Invoice Cancelled"), 'comment')
+            invoices.signal_workflow('invoice_cancel')
 
             # Isolate invoice lines in cancelled invoices instead of
             # deleting them
