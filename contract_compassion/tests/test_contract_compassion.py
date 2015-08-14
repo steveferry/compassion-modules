@@ -13,6 +13,7 @@ from openerp.tests import common
 from datetime import datetime
 from openerp import netsvc
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT as DF
+from dateutil.relativedelta import relativedelta
 import logging
 logger = logging.getLogger(__name__)
 
@@ -31,6 +32,7 @@ class test_contract_compassion(common.TransactionCase):
 
     def setUp(self):
         super(test_contract_compassion, self).setUp()
+
         # Retrieve receivable and payable accounts
         account_obj = self.env['account.account']
         account_type_obj = self.env['account.account.type']
@@ -45,7 +47,7 @@ class test_contract_compassion(common.TransactionCase):
             ('type', '=', 'payable'),
             ('user_type', '=', account_type)]).ids[0]
         property_account_income = account_obj.search([
-            ('type', '=', 'receivable'),
+            ('type', '=', 'other'),
             ('name', '=', 'Property Account Income Test')]).ids[0]
         # Creation of partners
         partner_obj = self.env['res.partner']
@@ -75,6 +77,19 @@ class test_contract_compassion(common.TransactionCase):
             In this test we are testing states changement of a contract and if
             the old invoice are well cancelled when we pay one invoice.
         """
+        # Creation of a the next fiscal year
+        next_year = (datetime.strptime(
+            (datetime.today().strftime(DF)), DF)
+            + relativedelta(years=+1)).year
+        fiscal_year = self.env['account.fiscalyear'].create({
+            'name': next_year,
+            'code': next_year,
+            'date_start': datetime.strptime((datetime(
+                next_year, 1, 1)).strftime(DF), DF),
+            'date_stop': datetime.strptime((datetime(
+                next_year, 12, 31)).strftime(DF), DF),
+            })
+        fiscal_year.create_period()
         contract_group = self._create_group(
             'do_nothing', 1, 'month', self.partners.ids[0], 5,
             self.payment_term_id)

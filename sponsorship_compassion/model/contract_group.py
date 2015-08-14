@@ -40,17 +40,10 @@ class contract_group(models.Model):
     #                             FIELDS METHODS                             #
     ##########################################################################
 
-    @api.multi
+    @api.one
     def _contains_sponsorship(self):
-        for group in self:
-            if group.contract_ids:
-                group.contains_sponsorship = False
-                for contract in group.contract_ids:
-                    if 'S' in contract.type:
-                        group.contains_sponsorship = True
-                        break
-            else:
-                group.contains_sponsorship = True
+        types = self.mapped('contract_ids.type')
+        self.contains_sponsorship = 'S' in types or 'SC' in types
 
     ##########################################################################
     #                             PUBLIC METHODS                             #
@@ -149,8 +142,10 @@ class contract_group(models.Model):
                     'sponsorship_compassion.suspend_product_id')])
                 if not suspend_config_id:
                     return False
+
                 current_product = self.env['product.product'].with_context(
                     lang='en_US').browse(invl_data['product_id'])
+
                 if current_product.categ_name == SPONSORSHIP_CATEGORY:
                     invl_data.update(self.env[
                         'recurring.contract'].get_suspend_invl_data(
@@ -171,6 +166,7 @@ class contract_group(models.Model):
             partner_id = contract_line.contract_id.partner_id.id
             analytic = self.env['account.analytic.default'].account_get(
                 product_id, partner_id, time.strftime('%Y-%m-%d'))
+
             if analytic and analytic.analytic_id:
                 invl_data.update({
                     'account_analytic_id': analytic.analytic_id.id})

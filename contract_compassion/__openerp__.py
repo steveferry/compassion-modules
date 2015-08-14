@@ -35,7 +35,8 @@
     'author': 'Compassion CH',
     'website': 'http://www.compassion.ch',
     'depends': ['recurring_contract', 'account_banking_mandate',
-                'child_compassion', 'l10n_ch_payment_slip'],
+                'child_compassion', 'account_analytic_compassion',
+                'l10n_ch_payment_slip'],
     'data': [
         'view/end_contract_wizard_view.xml',
         'view/contract_group_view.xml',
