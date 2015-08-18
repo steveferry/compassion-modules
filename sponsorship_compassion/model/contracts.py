@@ -310,10 +310,17 @@ class sponsorship_contract(models.Model):
                 "are automatically cancelled.".format(
                     project_code, contract.child_id.code),
                 "Project Suspended", 'comment')
+<<<<<<< HEAD
 
         # Change invoices if config tells to do so.
         if suspend_config:
             product_id = int(suspend_config[0].value)
+=======
+
+        # Change invoices if config tells to do so.
+        if suspend_config:
+            product_id = int(suspend_config[0].value)
+>>>>>>> da502c1... Code corrections
             self._suspend_change_invoices(date_start,
                                           product_id)
 
