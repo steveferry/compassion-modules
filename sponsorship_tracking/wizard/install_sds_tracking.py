@@ -109,42 +109,6 @@ class recurring_contract(models.TransientModel):
         terminated_contract_ids = contract_obj.search(
             [('state', '=', 'terminated'), ('end_reason', '!=', '1')]).ids
         no_sub_ids, sub_ids, sub_accept_ids, sub_reject_ids, \
-<<<<<<< HEAD:__unported__/sponsorship_tracking/wizard/install_sds_tracking.py
-            sub_waiting_ids = self._get_contract_sub(cr, uid)
-
-        self._set_sds_state(cr, uid, draft_contract_ids, 'draft', 'start_date')
-        self._set_sds_state(
-            cr, uid, waiting_contract_ids, 'active', 'start_date')
-        self._set_sds_state(
-            cr, uid, active_contract_ids, 'active', 'activation_date')
-        self._set_sds_state(
-            cr, uid, cancelled_contract_ids, 'cancelled', 'end_date')
-        self._set_sds_state(
-            cr, uid, terminated_contract_ids, 'cancelled', 'end_date')
-        self._set_sds_state(cr, uid, no_sub_ids, 'no_sub', 'end_date')
-        self._set_sds_state(cr, uid, sub_ids, 'sub', 'end_date')
-        self._set_sds_state(cr, uid, sub_waiting_ids, 'sub_waiting',
-                            'end_date')
-        self._set_sds_state(
-            cr, uid, sub_accept_ids, 'sub_accept', 'end_date', 50)
-        self._set_sds_state(
-            cr, uid, sub_reject_ids, 'sub_reject', 'end_date', 50)
-
-    def _set_sds_state(
-            self, cr, uid, contract_ids, sds_state,
-            sds_change_date, date_delta=0):
-        for contract_id in contract_ids:
-            cr.execute(
-                "UPDATE recurring_contract "
-                "SET sds_state = '{0}', sds_state_date = {1}+{2},"
-                "    color = {3} "
-                "WHERE id = {4} ".format(
-                    sds_state, sds_change_date,
-                    date_delta, SDS_COLORS[sds_state], contract_id))
-
-    # Only at module installation
-    def _get_contract_sub(self, cr, uid, ids=None, context=None):
-=======
             sub_waiting_ids = self._get_contract_sub()
 
         self._set_sds_state(draft_contract_ids, 'draft', 'start_date')
@@ -170,7 +134,6 @@ class recurring_contract(models.TransientModel):
                 date_delta, SDS_COLORS[sds_state], con_ids))
 
     def _get_contract_sub(self):
->>>>>>> 50207e6... Correct sponsorship_tracking and migrate workflow methods:sponsorship_tracking/wizard/install_sds_tracking.py
         """ Rules for setting SUB Status of a contract with child departed:
             1. No active or cancelled/terminated SUB contract exists -> no_sub
             2. One active SUB contract exists -> sub_accept
