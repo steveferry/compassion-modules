@@ -35,8 +35,4 @@ def migrate(cr, version):
         'recurring_contract': [
             ('last_sds_state_change_date', 'sds_state_date_old'),
         ]
-<<<<<<< HEAD
     })
-=======
-    })
->>>>>>> 9ba14f6... Migrate module sponsorship_tracking
