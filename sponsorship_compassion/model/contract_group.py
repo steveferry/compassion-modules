@@ -141,8 +141,10 @@ class contract_group(models.Model):
                     'sponsorship_compassion.suspend_product_id')]).id
                 if not suspend_config_id:
                     return False
+
                 current_product = self.env['product.product'].with_context(
                     lang='en_US').browse(invl_data['product_id'])
+
                 if current_product.categ_name == SPONSORSHIP_CATEGORY:
                     invl_data.update(self.env[
                         'recurring.contract'].get_suspend_invl_data(

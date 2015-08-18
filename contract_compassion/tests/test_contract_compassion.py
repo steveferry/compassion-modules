@@ -32,6 +32,7 @@ class test_contract_compassion(common.TransactionCase):
 
     def setUp(self):
         super(test_contract_compassion, self).setUp()
+
         # Retrieve receivable and payable accounts
         account_obj = self.env['account.account']
         account_type_obj = self.env['account.account.type']

@@ -65,8 +65,10 @@ class res_partner(models.Model):
                 'view_invoice_line_partner_tree')[1]
         except ValueError:
             view_id = False
+
         self.env.context = self.with_context(
             search_default_partner_id=self.ids).env.context
+
         action = {
             'name': _('Related invoice lines'),
             'type': 'ir.actions.act_window',
@@ -108,10 +110,7 @@ class res_partner(models.Model):
     @api.multi
     def create_contract(self):
         self.ensure_one()
-        context = self.with_context({
-            'default_partner_id': self.id,
-            'default_type': 'S',
-        }).env.context
+
         return {
             'type': 'ir.actions.act_window',
             'name': _('New Sponsorship'),
@@ -119,9 +118,9 @@ class res_partner(models.Model):
             'view_mode': 'form',
             'res_model': 'recurring.contract',
             'target': 'current',
-            'context': self.env.context.with_context({
+            'context': self.with_context({
                 'default_partner_id': self,
-                'default_type': 'S', })
+                'default_type': 'S', }).env.context
         }
 
     @api.multi

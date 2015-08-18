@@ -53,6 +53,7 @@ class generate_gift_wizard(models.TransientModel):
                         raise exceptions.Warning(
                             'BirthdayError',
                             _('The birthdate of the child is missing !'))
+
                 if self.product_id.name == GIFT_NAMES[0]:
                     invoice_date = self.compute_date_birthday_invoice(
                         contract.child_id.birthdate, self.invoice_date)
@@ -85,6 +86,7 @@ class generate_gift_wizard(models.TransientModel):
                 if invoice:
                     inv_line_data = self._setup_invoice_line(
                         invoice, contract)
+
                     self.env['account.invoice.line'].create(inv_line_data)
                     invoice_ids.append(invoice.id)
             else:
