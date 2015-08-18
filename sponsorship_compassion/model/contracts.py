@@ -313,14 +313,14 @@ class sponsorship_contract(models.Model):
 
         # Change invoices if config tells to do so.
         if suspend_config:
-            product = int(suspend_config[0].value)
+            product_id = int(suspend_config[0].value)
             self._suspend_change_invoices(date_start,
-                                          product)
+                                          product_id)
 
         return True
 
     @api.multi
-    def _suspend_change_invoices(self, since_date, product):
+    def _suspend_change_invoices(self, since_date, product_id):
         """ Change cancelled sponsorship invoices and put them for given
         product. Re-open invoices. """
 
@@ -333,7 +333,7 @@ class sponsorship_contract(models.Model):
             lang='en_US').mapped('invoice_id')
 
         invoices.action_cancel_draft()
-        vals = self.get_suspend_invl_data(product)
+        vals = self.get_suspend_invl_data(product_id)
         cancel_inv_lines.write(vals)
 
         wf_service = netsvc.LocalService('workflow')
@@ -342,12 +342,13 @@ class sponsorship_contract(models.Model):
                                     invoice_id, 'invoice_open', self.env.cr)
 
     @api.multi
-    def get_suspend_invl_data(self, product):
+    def get_suspend_invl_data(self, product_id):
         """ Returns invoice_line data for a given product when center
         is suspended. """
 
+        product = self.env['product.product'].browse(product_id)
         vals = {
-            'product_id': product.id,
+            'product_id': product_id,
             'account_id': product.property_account_income.id,
             'name': 'Replacement of sponsorship (fund-suspended)'}
         rec = self.env['account.analytic.default'].account_get(product)
