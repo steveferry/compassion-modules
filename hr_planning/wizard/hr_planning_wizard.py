@@ -189,6 +189,7 @@ class hr_planning_wizard(models.TransientModel):
                     {'start_date': new_start_date,
                      'end_date': new_end_date,
                      'employee_id': employee.id})
+
     @api.model
     def _get_time_zone(self):
         usr = self.env['res.users'].browse(SUPERUSER_ID)
